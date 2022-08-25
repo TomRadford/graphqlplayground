@@ -74,7 +74,7 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    personCount: () => persons.length,
+    personCount: () => Person.collection.countDocuments(),
     allPersons: async (root, args) => {
       if (!args.phone) {
         return Person.find({})

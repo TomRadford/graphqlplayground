@@ -30,14 +30,12 @@ const httpLink = new HttpLink({ uri: 'http://localhost:4000/graphql' })
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    uri: 'ws://localhost:3000/subscriptions',
-    shouldRetry: true,
+    url: 'ws://localhost:4000/subscriptions',
   })
 )
 
 const splitLink = split(
-  (query) => {
-    console.log(query)
+  ({ query }) => {
     const definition = getMainDefinition(query)
     return (
       definition.kind === 'OperationDefinition' &&

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useMutation } from '@apollo/client'
-
 import { EDIT_NUMBER } from './queries'
 
 const PhoneForm = ({ setError }) => {

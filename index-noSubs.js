@@ -1,14 +1,8 @@
 const { ApolloServer } = require('apollo-server-express')
 const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core')
 const { makeExecutableSchema } = require('@graphql-tools/schema')
-
-const { WebSocketServer } = require('ws')
-const { useServer } = require('graphql-ws/lib/use/ws')
-
 const express = require('express')
 const http = require('http')
-const cors = require('cors')
-
 const placeholderRouter = require('./controllers/placeholder')
 
 const jwt = require('jsonwebtoken')
@@ -30,22 +24,13 @@ mongoose
   .catch((error) => {
     console.log('error connecting to MongoDB: ', error.message)
   })
-mongoose.set('debug', true)
 
 const start = async () => {
   const app = express()
-  app.use(cors())
   app.use('/', placeholderRouter)
   const httpServer = http.createServer(app)
 
   const schema = makeExecutableSchema({ typeDefs, resolvers })
-
-  const wsServer = new WebSocketServer({
-    server: httpServer,
-    path: '',
-  })
-
-  const serverCleanup = useServer({ schema }, wsServer)
 
   const server = new ApolloServer({
     schema,
@@ -59,18 +44,7 @@ const start = async () => {
         return { currentUser }
       }
     },
-    plugins: [
-      ApolloServerPluginDrainHttpServer({ httpServer }),
-      {
-        async serverWillStart() {
-          return {
-            async drainServer() {
-              await serverCleanup.dispose()
-            },
-          }
-        },
-      },
-    ],
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   })
 
   await server.start()

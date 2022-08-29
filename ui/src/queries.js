@@ -12,6 +12,15 @@ const PERSON_DETAILS = gql`
   }
 `
 
+export const PERSON_ADDED = gql`
+  subscription {
+    personAdded {
+      ...PersonDetails
+    }
+  }
+  ${PERSON_DETAILS}
+`
+
 export const ALL_PERSONS = gql`
   query {
     allPersons {

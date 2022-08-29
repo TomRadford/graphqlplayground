@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useApolloClient } from '@apollo/client'
 import Persons from './Person'
 import PersonForm from './PersonForm'
@@ -19,6 +19,13 @@ const App = () => {
       setErrorMessage(null)
     }, 10000)
   }
+
+  useEffect(() => {
+    const localToken = localStorage.getItem('phonenumbers-user-token')
+    if (localToken) {
+      setToken(localToken)
+    }
+  }, [])
 
   const logout = () => {
     setToken(null)

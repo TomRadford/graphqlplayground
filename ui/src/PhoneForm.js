@@ -7,13 +7,15 @@ const PhoneForm = ({ setError }) => {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
 
-  const [changeNumber, result] = useMutation(EDIT_NUMBER)
+  const [changeNumber, result] = useMutation(EDIT_NUMBER, {
+    onError: (e) => {
+      setError(e.graphQLErrors[0].message)
+    },
+  })
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault()
-
-    changeNumber({ variables: { name, phone } })
-
+    await changeNumber({ variables: { name, phone } })
     setName('')
     setPhone('')
   }

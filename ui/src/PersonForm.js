@@ -22,9 +22,9 @@ const PersonForm = ({ setError }) => {
     },
   })
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault()
-    createPerson({
+    await createPerson({
       variables: {
         name,
         phone: phone.length > 0 ? phone : undefined,

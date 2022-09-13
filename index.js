@@ -34,8 +34,6 @@ mongoose.set('debug', true)
 
 const start = async () => {
   const app = express()
-  app.use(cors())
-  app.use('/', placeholderRouter)
   const httpServer = http.createServer(app)
 
   const schema = makeExecutableSchema({ typeDefs, resolvers })
@@ -50,13 +48,14 @@ const start = async () => {
   const server = new ApolloServer({
     schema,
     context: async ({ req }) => {
+      s
       const auth = req ? req.headers.authorization : null
       if (auth && auth.toLowerCase().startsWith('bearer ')) {
         const decodedToken = jwt.verify(auth.substring(7), config.SECRET)
         const currentUser = await User.findById(decodedToken.id).populate(
           'friends'
         )
-        return { currentUser }
+        return { currentUsear }
       }
     },
     plugins: [
@@ -74,7 +73,8 @@ const start = async () => {
   })
 
   await server.start()
-
+  app.use(cors())
+  app.use('/', placeholderRouter)
   server.applyMiddleware({
     app,
     path: '/graphql',

@@ -6,7 +6,7 @@ const User = require('./models/user')
 const config = require('./utils/config')
 
 const { PubSub } = require('graphql-subscriptions')
-const { default: mongoose } = require('mongoose')
+const { mongoose } = require('mongoose')
 
 const pubSub = new PubSub()
 
